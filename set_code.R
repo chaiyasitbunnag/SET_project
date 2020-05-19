@@ -9,13 +9,13 @@ robotstxt::paths_allowed(domain = "https://www.set.or.th")
 # test zone ------------------------------------
 
 # test to get url for each company
-url <- "https://www.set.or.th/set/commonslookup.do?language=th&country=TH&prefix=A"
+url <- "https://www.set.or.th/set/commonslookup.do?language=th&country=TH&prefix=NUMBER"
 htmlpage <- read_html(url)
 #htmlpage %>% html_node(xpath = "//div[@class = 'table']")
 links <- htmlpage %>% html_node(".table") %>% html_nodes("a") %>% html_attr("href")
 test <- links[1]
 test <- paste0("https://www.set.or.th/", test)
-company_name <- read_html(test) %>% html_node(".col-xs-12.col-md-9") %>% html_text()
+company_name <- read_html(test) %>% html_node("h3") %>% html_text()
 company_info <- read_html(test) %>% html_nodes(".col-xs-9.col-md-5") %>% html_text()
 #company_info[c(1,4,5,6)] #1 = PE; 4 = mkt cap; 5 = main index; 6 = industry
 pe <- company_info[1]
@@ -86,7 +86,7 @@ for(ii in 1:length(company_full_urls)) {
                            main_index = main_index_temp )
    # store every company's data
    company_info_df <- rbind(company_info_df, combined)
-
+   
 }
 
 company_info_df_2 <- cbind(company_full_urls, company_info_df)
